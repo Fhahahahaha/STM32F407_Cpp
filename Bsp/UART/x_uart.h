@@ -6,8 +6,7 @@
 #define XUART_H
 
 #include "usart.h"
-
-
+#include <string>
 
 class x_uart {
 public:
@@ -15,10 +14,12 @@ public:
 	~x_uart();
 
 	/** API **/
-	HAL_StatusTypeDef transmit(uint8_t* buffer, size_t length) const;		// 发送数据
+	HAL_StatusTypeDef transmit(uint8_t* buffer, size_t length, uint16_t time_out) const;		// 发送数据
+	HAL_StatusTypeDef transmit(std::string &str, uint16_t time_out) const;		// 发送数据
 	// [[nodiscard]] 的作用是告诉编译器：调用这个函数时，它的返回值不应被忽略
 	[[nodiscard]] uint8_t* get_rx_buffer() const;					// 直接获取buffer地址
-	[[nodiscard]] size_t read_rx_data(uint8_t* target);
+	size_t read_rx_data(uint8_t* target);
+	[[nodiscard]] size_t get_rx_data_length() const;
 	void begin_receive();
 
 	/** 用于与C文件中的uart回调函数联系 **/

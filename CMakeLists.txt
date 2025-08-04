@@ -43,9 +43,10 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/Bsp")
 
 # Create an executable object type
 add_executable(${CMAKE_PROJECT_NAME}
-#        Bsp/ESP8266/esp8266.cpp
+        Bsp/ESP8266/esp8266.cpp
         Bsp/UART/x_uart.cpp
         Core/Src/main.cpp
+        Bsp/LED/led.cpp
 )
 
 # Add STM32CubeMX generated sources

@@ -28,9 +28,12 @@ x_uart::~x_uart() {
 	free(uart_ctrl.rx_data);
 }
 
+HAL_StatusTypeDef x_uart::transmit(uint8_t *buffer, size_t length, uint16_t time_out) const {
+	return HAL_UART_Transmit(this_uart, buffer, length, time_out);
+}
 
-HAL_StatusTypeDef x_uart::transmit(uint8_t *buffer, size_t length) const {
-	return HAL_UART_Transmit(this_uart, buffer, length, 1000);
+HAL_StatusTypeDef x_uart::transmit(std::string &str, uint16_t time_out) const {
+	return HAL_UART_Transmit(this_uart, (uint8_t*)str.data(), str.length(), time_out);
 }
 
 uint8_t *x_uart::get_rx_buffer() const {
@@ -46,6 +49,9 @@ size_t x_uart::read_rx_data(uint8_t *target) {
 	return length;
 }
 
+size_t x_uart::get_rx_data_length() const {
+	return uart_ctrl.rx_data_length;
+}
 
 void x_uart::begin_receive() {
 	HAL_UART_Receive_IT(this_uart, &uart_ctrl.rx_buf, 1);

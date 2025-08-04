@@ -7,11 +7,11 @@
 #include <cstring>
 
 void esp8266::SendString(string &a) {
-	transmit((uint8_t*)a.data(), a.size());
+	transmit(a, 1000);
 }
 
 void esp8266::SendString(const char *a, size_t len) {
-	transmit((uint8_t*)a, len);
+	transmit((uint8_t*)a, len, 1000);
 }
 
 uint8_t esp8266::SendAT(string &pcStr, string &pcRes, uint16_t time_out) {
@@ -46,10 +46,10 @@ uint8_t esp8266::SendAT(const char *str, const char *res, int time_out) {
 	int temp_len = read_rx_data((uint8_t*)temp);
 	temp[temp_len] = '\0';
 
-	uint8_t res = strcmp(temp, res);
+	uint8_t result = strcmp(temp, res);
 	free(temp);
 
-	return res;	// 比较期望的字符串，以判断命令是否发送成功
+	return result;	// 比较期望的字符串，以判断命令是否发送成功
 }
 
 uint8_t esp8266::AT() {
@@ -105,5 +105,25 @@ uint8_t esp8266::AT_SetPassThrough(uint8_t value) {
 
 	SendString("+++", strlen("+++"));
 	return 0;
+}
+
+uint8_t esp8266::AT_CWJAP(string ssid, string pass) {
+	string temp("AT+CWJAP=");
+	temp = temp + '"' +  ssid + '"' + ',' + '"' + pass + '"';
+	temp += "\r\n";
+
+	string res("OK");
+
+	return SendAT(temp, res, 3000)  ;    // 发送给8266，并判断指令是否执行成功
+}
+
+uint8_t esp8266::AT_CIPSTART(string mode, string IP, string Port) {
+	string temp("AT+CIPSTART=");
+	temp = temp + '"' +  mode + '"' + ',' + '"' + IP + '"' + ',' + '"' + Port + '"';
+	temp += "\r\n";
+
+	string res("OK");
+
+	return SendAT(temp, res, 3000)  ;    // 发送给8266，并判断指令是否执行成功
 }
 
