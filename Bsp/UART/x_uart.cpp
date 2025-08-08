@@ -6,7 +6,8 @@
 #include "cstring"
 #include "malloc.h"
 
-x_uart::x_uart(UART_HandleTypeDef* uart_x, uart_ctrl_type ** uart_ctrl_linker) {
+/** 注： 初始化列表的顺序一定要遵守变量声明顺序 ！！！ **/
+x_uart::x_uart(UART_HandleTypeDef* uart_x, uart_ctrl_type ** uart_ctrl_linker):uart_stream_buf(uart_x), uart_ostream(&uart_stream_buf) {
 	this_uart = uart_x;
 
 	uart_ctrl = {
@@ -57,4 +58,7 @@ void x_uart::begin_receive() {
 	HAL_UART_Receive_IT(this_uart, &uart_ctrl.rx_buf, 1);
 }
 
+std::ostream &x_uart::stream() {
+	return uart_ostream;
+}
 
