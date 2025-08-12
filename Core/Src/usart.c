@@ -193,50 +193,50 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
 /* USER CODE BEGIN 1 */
 
-uart_ctrl_type *uart1_ctrl_linker;    // 用于联系 x_uart 类和这里的中断函数
-uart_ctrl_type *uart3_ctrl_linker;    // 用于联系 x_uart 类和这里的中断函数
-
-void USER_UART_RxCallback(uart_ctrl_type *uart_ctrl) {
-  if (uart_ctrl->rx_state == Receiving) {
-    if (uart_ctrl->rx_buf == '\r') {			// 接收到了 \r 表明包结束
-      uart_ctrl->rx_state = Waiting_n;
-    }
-    else if (uart_ctrl->rx_buf == '\n') {		// 还未接收到 \r 就接收到了 \n，接收错误，重新接收
-      uart_ctrl->rx_state = Receiving;
-      uart_ctrl->rx_buffer_length = 0;
-    }
-    else {
-      uart_ctrl->rx_buffer[uart_ctrl->rx_buffer_length++] = uart_ctrl->rx_buf;	// 持续接收数据
-    }
-  }
-  else if (uart_ctrl->rx_state == Waiting_n) {
-
-    if (uart_ctrl->rx_buf == '\n') {		// 成功接收，将数据从buffer赋值到data
-      memcpy(uart_ctrl->rx_data, uart_ctrl->rx_buffer, uart_ctrl->rx_buffer_length);		// memcpy(target, src, length)
-      uart_ctrl->rx_data_length = uart_ctrl->rx_buffer_length;
-    }
-    else {		// 接收错误，重新开始
-      uart_ctrl->rx_state = Receiving;
-      uart_ctrl->rx_buffer_length = 0;
-    }
-  }
-  else {		// 严重出错，重置状态
-    uart_ctrl->rx_state = Receiving;
-    uart_ctrl->rx_buffer_length = 0;
-    uart_ctrl->rx_data_length = 0;
-  }
-}
-
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-  if (huart == & huart1) {
-    USER_UART_RxCallback(uart1_ctrl_linker);   // uart_ctrl_type 在 x_uart类的构造函数中初始化，指向对应的 x_uart 类成员
-  }
-
-  if (huart == & huart3) {
-    USER_UART_RxCallback(uart3_ctrl_linker);   // uart_ctrl_type 在 x_uart类的构造函数中初始化，指向对应的 x_uart 类成员
-  }
-}
+// uart_ctrl_type *uart1_ctrl_linker;    // 用于联系 x_uart 类和这里的中断函数
+// uart_ctrl_type *uart3_ctrl_linker;    // 用于联系 x_uart 类和这里的中断函数
+//
+// void USER_UART_RxCallback(uart_ctrl_type *uart_ctrl) {
+//   if (uart_ctrl->rx_state == Receiving) {
+//     if (uart_ctrl->rx_buf == '\r') {			// 接收到了 \r 表明包结束
+//       uart_ctrl->rx_state = Waiting_n;
+//     }
+//     else if (uart_ctrl->rx_buf == '\n') {		// 还未接收到 \r 就接收到了 \n，接收错误，重新接收
+//       uart_ctrl->rx_state = Receiving;
+//       uart_ctrl->rx_buffer_length = 0;
+//     }
+//     else {
+//       uart_ctrl->rx_buffer[uart_ctrl->rx_buffer_length++] = uart_ctrl->rx_buf;	// 持续接收数据
+//     }
+//   }
+//   else if (uart_ctrl->rx_state == Waiting_n) {
+//
+//     if (uart_ctrl->rx_buf == '\n') {		// 成功接收，将数据从buffer赋值到data
+//       memcpy(uart_ctrl->rx_data, uart_ctrl->rx_buffer, uart_ctrl->rx_buffer_length);		// memcpy(target, src, length)
+//       uart_ctrl->rx_data_length = uart_ctrl->rx_buffer_length;
+//     }
+//     else {		// 接收错误，重新开始
+//       uart_ctrl->rx_state = Receiving;
+//       uart_ctrl->rx_buffer_length = 0;
+//     }
+//   }
+//   else {		// 严重出错，重置状态
+//     uart_ctrl->rx_state = Receiving;
+//     uart_ctrl->rx_buffer_length = 0;
+//     uart_ctrl->rx_data_length = 0;
+//   }
+// }
+//
+// void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+// {
+//   if (huart == & huart1) {
+//     USER_UART_RxCallback(uart1_ctrl_linker);   // uart_ctrl_type 在 x_uart类的构造函数中初始化，指向对应的 x_uart 类成员
+//   }
+//
+//   if (huart == & huart3) {
+//     USER_UART_RxCallback(uart3_ctrl_linker);   // uart_ctrl_type 在 x_uart类的构造函数中初始化，指向对应的 x_uart 类成员
+//   }
+// }
 
 
 /* USER CODE END 1 */

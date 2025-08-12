@@ -49,23 +49,23 @@ void MX_USART3_UART_Init(void);
 
 enum rx_sta_enum {Receiving, Waiting_n};
 
-typedef struct {
-  enum rx_sta_enum rx_state;		// uart接收数据状态变量
-  uint8_t rx_buf;				// uart采用中断接收，一次只接收一个字节
-
-  uint8_t* rx_buffer;			// 接收缓存
-  size_t rx_buffer_length;
-
-  uint8_t* rx_data;			// 数据缓存，接收完成了由 rx_buffer 中将数据赋值过来
-  size_t rx_data_length;
-}uart_ctrl_type;
-
-
-void USER_UART_RxCallback(uart_ctrl_type *uart_ctrl);
+// typedef struct {
+//   enum rx_sta_enum rx_state;		// uart接收数据状态变量
+//   uint8_t rx_buf;				// uart采用中断接收，一次只接收一个字节
+//
+//   uint8_t* rx_buffer;			// 接收缓存
+//   size_t rx_buffer_length;
+//
+//   uint8_t* rx_data;			// 数据缓存，接收完成了由 rx_buffer 中将数据赋值过来
+//   size_t rx_data_length;
+// }uart_ctrl_type;
 
 
-extern uart_ctrl_type *uart1_ctrl_linker;    // 用于联系 x_uart 类和这里的中断函数
-extern uart_ctrl_type *uart3_ctrl_linker;    // 用于联系 x_uart 类和这里的中断函数
+// void USER_UART_RxCallback(uart_ctrl_type *uart_ctrl);
+//
+//
+// extern uart_ctrl_type *uart1_ctrl_linker;    // 用于联系 x_uart 类和这里的中断函数
+// extern uart_ctrl_type *uart3_ctrl_linker;    // 用于联系 x_uart 类和这里的中断函数
 
 /* USER CODE END Prototypes */
 

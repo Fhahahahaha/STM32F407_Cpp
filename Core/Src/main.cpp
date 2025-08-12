@@ -14,7 +14,7 @@
 #include "LED/led.h"
 
 
-extern "C" int main(void)
+extern "C" [[noreturn]] int main(void)
 {
   /** HAL_SYS_Init **/
   HAL_Init();
@@ -31,15 +31,15 @@ extern "C" int main(void)
   led red_led(LED_RED_GPIO_Port, LED_RED_Pin );
 
   blue_led.on();
-  x_uart uart1_handler(&huart1, &uart1_ctrl_linker);
+  x_uart uart1(&huart1, &uart1_ctrl_linker);
   // uart1_handler.begin_receive();
 
   // esp8266 esp8266_handler(&huart3, &uart3_ctrl_linker);   // esp8266 已经继承了 x_uart 类
   // esp8266_handler.begin_receive();
 
-  uart1_handler.transmit((uint8_t*)"HelloWorld!\r\n", strlen("HelloWorld!\r\n"), 1000);
+  uart1.transmit((uint8_t*)"HelloWorld!\r\n", strlen("HelloWorld!\r\n"), 1000);
 
-  uart1_handler.stream() << "HELLO WORLD! \r\n" << 213123 << "sfs";
+  uart1 << "HELLO WORLD! \r\n" << 213123 << "sfs";
 
   // esp8266_handler.AT();
   // esp8266_handler.AT_CWMODE(esp8266::STA);
@@ -48,9 +48,12 @@ extern "C" int main(void)
   // esp8266_handler.AT_CIPMUX(0);
   // esp8266_handler.AT_SetPassThrough(1);
   // size_t temp_len;
-  while (1)
+  int a;
+  while (true)
   {
     red_led.toggle();
+    uart1 >> a;
+    uart1 << a*10;
     // temp_len = uart1_handler.get_rx_data_length();
     // if (temp_len > 0) {
     //   auto *temp = (uint8_t*)malloc(temp_len);
